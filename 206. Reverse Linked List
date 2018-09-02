@@ -1,0 +1,49 @@
+/**
+Reverse a singly linked list.
+
+Example:
+
+Input: 1->2->3->4->5->NULL
+Output: 5->4->3->2->1->NULL
+Follow up:
+
+A linked list can be reversed either iteratively or recursively. Could you implement both?
+*/
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        //return helperRev(null, head);
+        return helperRev2(head);
+    }
+    
+    public ListNode helperRev(ListNode prev, ListNode curr){
+        //return new head
+        if(curr == null) return prev;
+        
+        //reverse 
+        ListNode oldNext = curr.next;
+        curr.next=prev;
+        
+        //always returning the new head 
+        return helperRev(curr, oldNext);
+    }
+    
+    public ListNode helperRev2(ListNode head){
+        ListNode prev = null;
+        while(head != null){
+            ListNode oldNext = head.next;
+            head.next = prev;
+            prev = head;
+            head = oldNext;
+        }
+        return prev;
+    }
+}
