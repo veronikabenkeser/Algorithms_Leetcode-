@@ -18,6 +18,36 @@ Could you come up with a one-pass algorithm using only constant space?
 
 class Solution {
     public void sortColors(int[] nums) {
+        //doSolution1(nums);
+        doSolution2(nums);
+    }
+    
+    public void doSolution2(int[] nums){
+        threeWayQuicksort(nums, 1);
+    }
+    
+    public void threeWayQuicksort(int[] nums, int pivot){
+        int left = 0;
+        int right = nums.length-1;
+        int firstRepeat = 0;
+        
+        while(left <= right){
+            while(left <= right && nums[left] < pivot){
+                swap(firstRepeat, left, nums);
+                firstRepeat++;
+                left++;
+            }
+            while(left <= right && nums[left] == pivot){
+                left++;
+            }
+            while(left <= right && nums[left] > pivot){
+                swap(left, right, nums);
+                right --;
+            }
+        }
+    }
+    
+    public void doSolution1(int[] nums){
         for(int i=0; i<3; i++){
             sortBy(i, nums);
         }
@@ -27,14 +57,14 @@ class Solution {
         int left = 0;
         int right = nums.length-1;
         
-        while(left < right ){
-            while(left >=0 && left < nums.length && left < right && nums[left] <= sortByNum){
+        while(left <= right ){
+            while(left <= right && nums[left] <= sortByNum){
                 left ++;
             }
-            while(right >=0 && right < nums.length && left < right && nums[right] > sortByNum){
+            while(left <= right && nums[right] > sortByNum){
                 right --;
             }
-            if(left >=0 && left < nums.length && right >=0 && left < right && right < nums.length){
+            if(left <= right && right < nums.length){
                 swap(left, right, nums);
                 right --;
             }
