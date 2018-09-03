@@ -28,6 +28,9 @@ There are at least one 0 in the given matrix.
 The cells are adjacent in only four directions: up, down, left and right.
 */
 
+// Need to label by distance away from target -> BFS. Go by levels. Strategy: Start exploring from 0's. The closest neighbors to 0 will be 1 distance away. Those neighbors' neighbors will be 2 
+// away, etc. For each item in the queue, make sure to record the distance at which it was found. 
+
 public class Solution {
     public int[][] updateMatrix(int[][] matrix) {
         Set<Integer> cache = new HashSet<>();
