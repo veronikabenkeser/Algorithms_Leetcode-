@@ -1,0 +1,85 @@
+/*
+Given a matrix consists of 0 and 1, find the distance of the nearest 0 for each cell.
+
+The distance between two adjacent cells is 1.
+Example 1: 
+Input:
+
+0 0 0
+0 1 0
+0 0 0
+Output:
+0 0 0
+0 1 0
+0 0 0
+Example 2: 
+Input:
+
+0 0 0
+0 1 0
+1 1 1
+Output:
+0 0 0
+0 1 0
+1 2 1
+Note:
+The number of elements of the given matrix will not exceed 10,000.
+There are at least one 0 in the given matrix.
+The cells are adjacent in only four directions: up, down, left and right.
+*/
+
+public class Solution {
+    public int[][] updateMatrix(int[][] matrix) {
+        Set<Integer> cache = new HashSet<>();
+        Queue<int[]> queue = new LinkedList<>();
+        for(int row = 0; row< matrix.length; row++){
+           for(int col = 0; col <matrix[0].length; col++){
+                if(matrix[row][col] == 0){
+                    int[] arr = {row, col, 0};
+                    queue.add(arr);
+                    
+                    //calc its unique number in the matrix
+                    int num = row*matrix[0].length + col;
+                    cache.add(num); 
+                } 
+           }
+        }
+        fillMatrix(matrix, queue, cache);
+        return matrix;
+    }
+    
+    public void fillMatrix(int[][] matrix, Queue<int[]> queue, Set<Integer> cache){
+        while(!queue.isEmpty()){  
+            int[] item = queue.poll();
+            int row = item[0];
+            int col = item[1];
+            int distance = item[2];
+
+            if(matrix[row][col] != 0){
+                matrix[row][col] = distance;
+            }
+
+            int[][] neighborCoords = {{-1,0}, {1,0}, {0,-1}, {0, 1}};
+
+            for(int[] arr: neighborCoords){
+
+                //add neighbor
+                int neighborRow = row+arr[0];
+                int neighborCol = col+arr[1];
+                
+                if (!isInBounds(neighborRow, neighborCol, matrix.length, matrix[0].length)) continue;
+                
+                int neighborDistance = distance+1;
+                int neighborNumber = neighborRow*matrix[0].length + neighborCol;
+
+                if(!cache.contains(neighborNumber)){
+                   queue.add(new int[]{neighborRow, neighborCol, neighborDistance});
+                   cache.add(neighborNumber); 
+                }
+            }
+        }
+    }
+    public boolean isInBounds(int row, int col, int maxRow, int maxCol){
+        return (row >=0 && row < maxRow && col >=0 && col < maxCol);
+    }
+}
